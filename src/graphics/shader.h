@@ -7,16 +7,22 @@
 #include <sstream>
 #include <iostream>
 
+#include <glm/glm.hpp>
+
 class Shader
 {
+	private:
+		static GLint GetUniformLocation(GLuint program, const std::string& name);
+
 	public:
 		unsigned int ID;
 		
 		Shader(const char* vertexPath, const char* fragmentPath);
 		
-		void use();
-
-		void setBool(const std::string& name, bool value) const;
-		void setInt(const std::string& name, int value) const;
-		void setFloat(const std::string& name, float value) const;
+		void Use();
+		void SetBool(const std::string& name, bool value) const;
+		void SetInt(const std::string& name, int value) const;
+		void SetFloat(const std::string& name, float value) const;
+		void SetIntArray(const std::string& name, int* values, uint32_t count) const;
+		void SetMat4(const std::string& name, const glm::mat4& mat) const;
 };

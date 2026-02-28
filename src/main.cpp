@@ -2,6 +2,9 @@
 #include <GLFW/glfw3.h>
 
 #include "graphics/shader.h"
+#include "graphics/renderer2D.h"
+#include "graphics/texture2D.h"
+#include "graphics/sprite.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -26,6 +29,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, NULL, NULL);
     if (!window)
@@ -45,48 +49,54 @@ int main()
     }
 
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    float vertices[] =
-    {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f
-    };
+    Shader defaultShader("assets/shaders/default_vertex_shader.vert", "assets/shaders/default_fragment_shader.frag");
+    Renderer2D renderer;
 
-    unsigned int VAO, VBO;
-    glGenBuffers(1, &VBO);
-    glGenVertexArrays(1, &VAO);
+    int samplers[16];
+    for (int i = 0; i < 16; i++)
+        samplers[i] = i;
 
-    glBindVertexArray(VAO);
+    glm::mat4 projection =
+        glm::ortho(
+            0.0f,
+            (float)WINDOW_WIDTH,
+            0.0f,
+            (float)WINDOW_HEIGHT
+        );
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glm::mat4 view = glm::mat4(1.0f);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    glm::mat4 viewProjection = projection * view;
 
+    defaultShader.Use();
+    defaultShader.SetIntArray("u_Textures", samplers, 16);
+    defaultShader.SetMat4("u_ViewProjection", viewProjection);
 
-    Shader triangleShader("assets/shaders/default_vertex_shader.vert", "assets/shaders/default_fragment_shader.frag");
+    auto texture = std::make_shared<Texture2D>("assets/textures/frisk.png");
+
+    Sprite sprite(
+        texture,
+        { WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0.0f },
+        { 200.0f, 200.0f }
+    );
 
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        triangleShader.use();
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        defaultShader.Use();
+
+        renderer.BeginBatch();
+        renderer.DrawSprite(sprite);
+        renderer.EndBatch();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteProgram(triangleShader.ID);
 
     glfwTerminate();
     return 0;

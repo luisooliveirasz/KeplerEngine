@@ -7,6 +7,8 @@
 #include <sstream>
 #include <iostream>
 
+#include <glm/glm.hpp>
+
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
 	// Reading vertex and fragment codes
@@ -81,23 +83,42 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	glDeleteShader(fragment);
 }
 
-void Shader::use()
+void Shader::Use()
 {
 	glUseProgram(ID);
 }
 
-void Shader::setBool(const std::string& name, bool value) const
+GLint Shader::GetUniformLocation(GLuint program, const std::string& name)
 {
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+	GLint location = glGetUniformLocation(program, name.c_str());
+	if (location == -1)
+		std::cout << "Warning: uniform '" << name
+		<< "' not found.\n";
+	return location;
 }
 
-void Shader::setInt(const std::string& name, int value) const
+void Shader::SetBool(const std::string& name, bool value) const
 {
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+	glUniform1i(GetUniformLocation(ID, name.c_str()), (int)value);
 }
 
-void Shader::setFloat(const std::string& name, float value) const
+void Shader::SetInt(const std::string& name, int value) const
+{
+	glUniform1i(GetUniformLocation(ID, name.c_str()), value);
+}
+
+void Shader::SetFloat(const std::string& name, float value) const
 {
 
-	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+	glUniform1f(GetUniformLocation(ID, name.c_str()), value);
+}
+
+void Shader::SetIntArray(const std::string& name, int* values, uint32_t count) const
+{
+	glUniform1iv(GetUniformLocation(ID, name.c_str()), count, values);
+}
+
+void Shader::SetMat4(const std::string& name, const glm::mat4& mat) const
+{
+	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
