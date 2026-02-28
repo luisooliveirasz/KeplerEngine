@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="KeplerEngine.vcxproj" Id="5e28a91a-880f-4965-9e6c-9927bff44aa6" />
+</Solution>
