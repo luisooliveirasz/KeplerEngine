@@ -5,6 +5,7 @@
 #include "graphics/renderer2D.h"
 #include "graphics/texture2D.h"
 #include "graphics/sprite.h"
+#include "graphics/Camera2D.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -59,36 +60,34 @@ int main()
     for (int i = 0; i < 16; i++)
         samplers[i] = i;
 
-    glm::mat4 projection =
-        glm::ortho(
-            0.0f,
-            (float)WINDOW_WIDTH,
-            0.0f,
-            (float)WINDOW_HEIGHT
-        );
-
-    glm::mat4 view = glm::mat4(1.0f);
-
-    glm::mat4 viewProjection = projection * view;
+    Camera2D camera(1366, 768);
 
     defaultShader.Use();
     defaultShader.SetIntArray("u_Textures", samplers, 16);
-    defaultShader.SetMat4("u_ViewProjection", viewProjection);
+    
 
     auto texture = std::make_shared<Texture2D>("assets/textures/frisk.png");
 
     Sprite sprite(
         texture,
-        { WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0.0f },
-        { 200.0f, 200.0f }
+        { 0, 0, 0.0f },
+        { 0.25f, 0.25f }
     );
+
 
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glm::mat4 viewProjection = camera.GetViewProjectionMatrix();
+
         defaultShader.Use();
+        defaultShader.SetMat4("u_ViewProjection", viewProjection);
+
+        // Testing
+        camera.SetRotation(glfwGetTime() / 10);
+        camera.SetZoom(1.0f + glm::sin(glfwGetTime()) * 0.75f);
 
         renderer.BeginBatch();
         renderer.DrawSprite(sprite);

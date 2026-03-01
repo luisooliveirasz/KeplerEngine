@@ -209,7 +209,7 @@ class Renderer2D
 		{
 			DrawQuad(
 				sprite.GetPosition(),
-				sprite.GetSize(),
+				sprite.GetSize() * sprite.GetScale(),
 				sprite.GetTextureID(),
 				sprite.GetColor()
 			);

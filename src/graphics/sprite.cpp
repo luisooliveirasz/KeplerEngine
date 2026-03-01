@@ -3,10 +3,11 @@
 
 Sprite::Sprite(const std::shared_ptr<Texture2D>& texture,
     const glm::vec3& position,
-    const glm::vec2& size)
+    const glm::vec2& scale)
     : m_Texture(texture),
     m_Position(position),
-    m_Size(size)
+    m_Size(glm::vec2(texture->GetWidth(), texture->GetHeight())),
+    m_Scale(scale)
 {
 }
 
@@ -15,9 +16,9 @@ void Sprite::SetPosition(const glm::vec3& position)
     m_Position = position;
 }
 
-void Sprite::SetSize(const glm::vec2& size)
+void Sprite::SetScale(const glm::vec2& scale)
 {
-    m_Size = size;
+    m_Scale = scale;
 }
 
 void Sprite::SetColor(const glm::vec4& color)
