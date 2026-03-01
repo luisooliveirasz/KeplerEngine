@@ -1,6 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "core/time.h"
+#include "core/input.h"
+
 #include "graphics/shader.h"
 #include "graphics/renderer2D.h"
 #include "graphics/texture2D.h"
@@ -74,9 +77,16 @@ int main()
         { 0.25f, 0.25f }
     );
 
+    Time::Init();
+    Input::Init(window);
 
     while (!glfwWindowShouldClose(window))
     {
+        Time::Update();
+        Input::Update();
+        
+        std::cout << Time::TotalTime() << std::endl;
+
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 

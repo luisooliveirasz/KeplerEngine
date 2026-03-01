@@ -132,19 +132,25 @@ opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="libs\glad\src\glad.c" />
+    <ClCompile Include="src\core\input.cpp" />
+    <ClCompile Include="src\core\time.cpp" />
     <ClCompile Include="src\graphics\camera2D.cpp" />
     <ClCompile Include="src\graphics\renderer2D.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
     <ClCompile Include="src\graphics\sprite.cpp" />
     <ClCompile Include="src\graphics\texture2D.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\scene\game_object.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\input.h" />
+    <ClInclude Include="src\core\time.h" />
     <ClInclude Include="src\graphics\camera2D.h" />
     <ClInclude Include="src\graphics\renderer2D.h" />
     <ClInclude Include="src\graphics\shader.h" />
     <ClInclude Include="src\graphics\sprite.h" />
     <ClInclude Include="src\graphics\texture2D.h" />
+    <ClInclude Include="src\scene\game_object.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
