@@ -205,13 +205,13 @@ class Renderer2D
 			m_IndexCount += 6;
 		}
 
-		void DrawSprite(const Sprite& sprite)
+		void DrawSprite(const Sprite* sprite, glm::vec3& position, glm::vec2& scale)
 		{
 			DrawQuad(
-				sprite.GetPosition(),
-				sprite.GetSize() * sprite.GetScale(),
-				sprite.GetTextureID(),
-				sprite.GetColor()
+				position,
+				sprite->GetSize() * scale,
+				sprite->GetTextureID(),
+				sprite->GetColor()
 			);
 		}
 };

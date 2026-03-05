@@ -3,6 +3,9 @@
 
 #include "core/time.h"
 #include "core/input.h"
+#include "core/game_state.h"
+
+#include "scene/game_object.h"
 
 #include "graphics/shader.h"
 #include "graphics/renderer2D.h"
@@ -80,12 +83,19 @@ int main()
     Time::Init();
     Input::Init(window);
 
+    GameState::Init(window, &renderer);
+
+    GameObject gameObject;
+    gameObject.SetSprite(&sprite);
+    gameObject.SetSpeed(glm::vec2(50.0f, 0.0f));
+
     while (!glfwWindowShouldClose(window))
     {
         Time::Update();
         Input::Update();
-        
-        std::cout << Time::TotalTime() << std::endl;
+
+        float dt = Time::DeltaTime();
+        gameObject.Update(dt);
 
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -95,12 +105,8 @@ int main()
         defaultShader.Use();
         defaultShader.SetMat4("u_ViewProjection", viewProjection);
 
-        // Testing
-        camera.SetRotation(glfwGetTime() / 10);
-        camera.SetZoom(1.0f + glm::sin(glfwGetTime()) * 0.75f);
-
         renderer.BeginBatch();
-        renderer.DrawSprite(sprite);
+        gameObject.Draw();
         renderer.EndBatch();
 
         glfwSwapBuffers(window);

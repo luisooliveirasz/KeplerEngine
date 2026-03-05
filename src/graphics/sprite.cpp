@@ -1,4 +1,4 @@
-#include "Sprite.h"
+#include "sprite.h"
 #include "texture2D.h"
 
 Sprite::Sprite(const std::shared_ptr<Texture2D>& texture,

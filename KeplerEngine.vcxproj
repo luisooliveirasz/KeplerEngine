@@ -132,6 +132,7 @@ opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="libs\glad\src\glad.c" />
+    <ClCompile Include="src\core\game_state.cpp" />
     <ClCompile Include="src\core\input.cpp" />
     <ClCompile Include="src\core\time.cpp" />
     <ClCompile Include="src\graphics\camera2D.cpp" />
@@ -143,6 +144,7 @@ opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     <ClCompile Include="src\scene\game_object.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\game_state.h" />
     <ClInclude Include="src\core\input.h" />
     <ClInclude Include="src\core\time.h" />
     <ClInclude Include="src\graphics\camera2D.h" />
