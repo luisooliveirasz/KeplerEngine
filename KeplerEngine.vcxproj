@@ -152,6 +152,7 @@ opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     <ClInclude Include="src\graphics\shader.h" />
     <ClInclude Include="src\graphics\sprite.h" />
     <ClInclude Include="src\graphics\texture2D.h" />
+    <ClInclude Include="src\graphics\texture_manager.h" />
     <ClInclude Include="src\scene\game_object.h" />
   </ItemGroup>
   <ItemGroup>

@@ -60,7 +60,9 @@ int main()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     Shader defaultShader("assets/shaders/default_vertex_shader.vert", "assets/shaders/default_fragment_shader.frag");
-    Renderer2D renderer;
+
+    Renderer2D* renderer = new Renderer2D();
+    TextureManager* textureManager = new TextureManager();
 
     int samplers[16];
     for (int i = 0; i < 16; i++)
@@ -70,24 +72,11 @@ int main()
 
     defaultShader.Use();
     defaultShader.SetIntArray("u_Textures", samplers, 16);
-    
-
-    auto texture = std::make_shared<Texture2D>("assets/textures/frisk.png");
-
-    Sprite sprite(
-        texture,
-        { 0, 0, 0.0f },
-        { 0.25f, 0.25f }
-    );
 
     Time::Init();
     Input::Init(window);
 
-    GameState::Init(window, &renderer);
-
-    GameObject gameObject;
-    gameObject.SetSprite(&sprite);
-    gameObject.SetSpeed(glm::vec2(50.0f, 0.0f));
+    GameState::Init(window, renderer, textureManager);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -95,7 +84,6 @@ int main()
         Input::Update();
 
         float dt = Time::DeltaTime();
-        gameObject.Update(dt);
 
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -105,9 +93,11 @@ int main()
         defaultShader.Use();
         defaultShader.SetMat4("u_ViewProjection", viewProjection);
 
-        renderer.BeginBatch();
-        gameObject.Draw();
-        renderer.EndBatch();
+        renderer->BeginBatch();
+
+
+
+        renderer->EndBatch();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
